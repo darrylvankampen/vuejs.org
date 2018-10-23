@@ -3,31 +3,33 @@ title: API
 type: api
 ---
 
-## Global Config
+## Globale configuratie
 
-`Vue.config` is an object containing Vue's global configurations. You can modify its properties listed below before bootstrapping your application:
+`Vue.config` is een object dat de globale configuratie van Vue bevat. Je staat vrij om de eigenschappen, die hier beneden zijn weergeven, aan te passen:
+
+<!-- `Vue.config` is an object containing Vue's global configurations. You can modify its properties listed below before bootstrapping your application: -->
 
 ### silent
 
 - **Type:** `boolean`
 
-- **Default:** `false`
+- **Standaard:** `false`
 
-- **Usage:**
+- **Gebruik:**
 
   ``` js
   Vue.config.silent = true
   ```
 
-  Suppress all Vue logs and warnings.
+  Onderdruk alle Vue logs en waarschuwingen.
 
 ### optionMergeStrategies
 
 - **Type:** `{ [key: string]: Function }`
 
-- **Default:** `{}`
+- **Standaard:** `{}`
 
-- **Usage:**
+- **Gebruik:**
 
   ``` js
   Vue.config.optionMergeStrategies._my_option = function (parent, child, vm) {
@@ -41,104 +43,107 @@ type: api
   // Profile.options._my_option = 2
   ```
 
-  Define custom merging strategies for options.
 
-  The merge strategy receives the value of that option defined on the parent and child instances as the first and second arguments, respectively. The context Vue instance is passed as the third argument.
+  Defineer aangepaste samenvoegstrategieën voor opties.
+  
+   De samenvoegstrategie ontvangt de waarde van de optie die gedefineerd binnen de parent en child instantie als eerste en tweede argument. De context van de Vue instantie wordt als derde argument meegegeven.
 
-- **See also:** [Custom Option Merging Strategies](../guide/mixins.html#Custom-Option-Merge-Strategies)
+- **Zie ook:** [Aangepaste samenvoegstrategieën voor opties](../guide/mixins.html#Custom-Option-Merge-Strategies)
 
 ### devtools
 
 - **Type:** `boolean`
 
-- **Default:** `true` (`false` in production builds)
+- **Standaard:** `true` (`false` binnen productiemodus)
 
-- **Usage:**
+- **Gebruik:**
 
   ``` js
-  // make sure to set this synchronously immediately after loading Vue
+  // Zorg ervoor dat dit synchroon gezet wordt na het laden van Vue
   Vue.config.devtools = true
   ```
 
-  Configure whether to allow [vue-devtools](https://github.com/vuejs/vue-devtools) inspection. This option's default value is `true` in development builds and `false` in production builds. You can set it to `true` to enable inspection for production builds.
+  Configueer of de inspectie van [vue-devtools](https://github.com/vuejs/vue-devtools) toegestaan is. De standaardwaarde van de optie is `true` binnen de ontwikkelingsmodus en `false` binnen productiemodus. Het is mogelijk om de waarde naar `true` te zetten om de inspectie te gebruiken binnen productiemodus.
 
 ### errorHandler
 
 - **Type:** `Function`
 
-- **Default:** `undefined`
+- **Standaard:** `undefined`
 
-- **Usage:**
+- **Gebruik:**
 
   ``` js
   Vue.config.errorHandler = function (err, vm, info) {
-    // handle error
-    // `info` is a Vue-specific error info, e.g. which lifecycle hook
-    // the error was found in. Only available in 2.2.0+
+    // Ga om met de fout
+    // `info` is Vue specifieke informatie over de fout. 
+    // Bijvoorbeeld binnen welke lifycycle hook de fout gevonden is. 
+    // Alleen beschikbaar in 2.2.0+
   }
   ```
+  Voeg een verwerker toe voor niet-afgevangen fouten die kunnen optreden tijdens het renderen van het component en bij de watchers. De verwerker wordt aangeroepen met de error en de instantie van Vue.
 
-  Assign a handler for uncaught errors during component render function and watchers. The handler gets called with the error and the Vue instance.
+  > In 2.2.0+ vangt deze hook ook fouten af die optreden binnen de lifecyle hooks. Het maakt niet uit of deze hook `undefined` is. Afgevangen fouten zullen gelogged worden door middel van `console.error` in plaats van het laten crashes van de applicatie.
 
-  > In 2.2.0+, this hook also captures errors in component lifecycle hooks. Also, when this hook is `undefined`, captured errors will be logged with `console.error` instead of crashing the app.
+  > In 2.4.0+ vangt deze hook ook fouten af die gegooid worden binnen aangemaakte event handlers.
 
-  > In 2.4.0+ this hook also captures errors thrown inside Vue custom event handlers.
+  > Foutopsporingsservices [Sentry](https://sentry.io/for/vue/) en [Bugsnag](https://docs.bugsnag.com/platforms/browsers/vue/) bieden officiële integratie wanneer er gebruik gemaakt wordt van deze optie. 
 
-  > Error tracking services [Sentry](https://sentry.io/for/vue/) and [Bugsnag](https://docs.bugsnag.com/platforms/browsers/vue/) provide official integrations using this option.
 
 ### warnHandler
 
-> New in 2.4.0+
+> Nieuw in 2.4.0+
 
 - **Type:** `Function`
 
-- **Default:** `undefined`
+- **Standaard:** `undefined`
 
-- **Usage:**
+- **Gebruik:**
 
   ``` js
   Vue.config.warnHandler = function (msg, vm, trace) {
-    // `trace` is the component hierarchy trace
+    // `trace` is de hiërarchie van de componenten
   }
   ```
 
-  Assign a custom handler for runtime Vue warnings. Note this only works during development and is ignored in production.
+  Wijs een handler toe voor runtime Vue waarschuwingen. Let op: dit werkt alleen binnen een ontwikkelingsmodus. Het wordt genegeerd binnen een productiemodus.
 
 ### ignoredElements
 
 - **Type:** `Array<string | RegExp>`
 
-- **Default:** `[]`
+- **Standaard:** `[]`
 
-- **Usage:**
+- **Gebruik:**
 
   ``` js
   Vue.config.ignoredElements = [
     'my-custom-web-component',
     'another-web-component',
-    // Use a `RegExp` to ignore all elements that start with "ion-"
-    // 2.5+ only
+    // Maak gebruik van een 'RegExp' om alle elementen te negeren 
+    // die beginnen met "ion-"
+    // Alleen te gebruiken in 2.5+
     /^ion-/
   ]
   ```
-
-  Make Vue ignore custom elements defined outside of Vue (e.g., using the Web Components APIs). Otherwise, it will throw a warning about an `Unknown custom element`, assuming that you forgot to register a global component or misspelled a component name.
+  Zorgt ervoor dat Vue aangepaste elementen negeert die buiten Vue gedefinieerd zijn (bijvoobeeld het gebruik van de Web Components APIs). Het zal anders een `Unknown custom element` waarschuwing gooien, omdat het ervan uitgaat dat je vergeten bent om een globaal component te definiëren of de naam van een component verkeerd geschreven hebt.
 
 ### keyCodes
 
 - **Type:** `{ [key: string]: number | Array<number> }`
 
-- **Default:** `{}`
+- **Standaard:** `{}`
 
-- **Usage:**
+- **Gebruik:**
 
   ``` js
   Vue.config.keyCodes = {
     v: 86,
     f1: 112,
-    // camelCase won`t work
+    // camelCase werkt niet
     mediaPlayPause: 179,
-    // instead you can use kebab-case with double quotation marks
+    // in plaats daarvan is het mogelijk om kebab-case met 
+    // dubbele aanhalingstekens te gebruiken
     "media-play-pause": 179,
     up: [38, 87]
   }
@@ -148,31 +153,32 @@ type: api
   <input type="text" @keyup.media-play-pause="method">
   ```
 
-  Define custom key alias(es) for `v-on`.
+  Definieer aangepaste toets alias(sen) voor `v-on`.
 
 ### performance
 
-> New in 2.2.0+
+> Nieuw in 2.2.0+
 
 - **Type:** `boolean`
 
-- **Default:** `false (from 2.2.3+)`
+- **Gebruik:** `false (vanaf 2.2.3+)`
 
-- **Usage**:
+- **Gebruik**:
 
-  Set this to `true` to enable component init, compile, render and patch performance tracing in the browser devtool performance/timeline panel. Only works in development mode and in browsers that support the [performance.mark](https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark) API.
+  Stel dit in op `true` om component init, compile, render en patch performance tracing binnen de browser devtool performance/timeline panel in te schakelen. Dit werkt alleen binnen de ontwikkelingsmodus en in de browsers die de [performance.mark](https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark) API ondersteunen.
 
 ### productionTip
 
-> New in 2.2.0+
+> Nieuw in 2.2.0+
 
 - **Type:** `boolean`
 
-- **Default:** `true`
+- **Standaard:** `true`
 
-- **Usage**:
+- **Gebruik**:
 
-  Set this to `false` to prevent the production tip on Vue startup.
+  Stel dit in op `false` om de production tip tijdens het opstarten van Vue te voorkomen.
+  
 
 ## Global API
 
